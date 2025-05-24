@@ -166,6 +166,7 @@ jobs:
               "portMappings": [{"containerPort": 8080, "protocol": "tcp"}],
               "environment": [
                 {"name": "SPRING_PROFILES_ACTIVE", "value": "prod"},
+                {"name": "SPRING_JPA_HIBERNATE_DDL_AUTO", "value": "update"},
                 {"name": "DB_HOST", "value": "payroll-prod-db.cluug9r0tmdt.us-east-1.rds.amazonaws.com"},
                 {"name": "DB_NAME", "value": "payroll_prod"},
                 {"name": "DB_USERNAME", "value": "payroll_user"},
@@ -225,6 +226,7 @@ jobs:
         echo "   Health: http://$PUBLIC_IP:8080/actuator/health"
         echo "   API: http://$PUBLIC_IP:8080/employees"
         echo "   Login: http://$PUBLIC_IP:8080/auth/login"
+        echo "   Swagger: http://$PUBLIC_IP:8080/swagger-ui.html"
         echo ""
         echo "🗄️ Database: AWS RDS PostgreSQL"
         echo "   • Endpoint: payroll-prod-db.cluug9r0tmdt.us-east-1.rds.amazonaws.com"
@@ -232,12 +234,13 @@ jobs:
         echo "   • Port: 5432"
         echo ""
         echo "📊 Environment: Production"
-        echo "🔒 Security: JWT (30min), Swagger disabled"
+        echo "🔒 Security: JWT (30min), Swagger enabled"
         echo ""
         echo "✨ Your app now uses a real database!"
         echo ""
         echo "🧪 Quick test:"
         echo "   curl http://$PUBLIC_IP:8080/actuator/health"
+        echo "   curl http://$PUBLIC_IP:8080/api-docs"
         
         # Health check
         echo ""
@@ -274,6 +277,7 @@ jobs:
         echo "   4. ✅ Image pushed to ECR"
         echo "   5. ✅ ECS task updated with database"
         echo "   6. ✅ Live endpoints connected to RDS!"
+        echo "   7. ✅ Swagger UI available for API testing!"
         echo ""
         echo "🎯 TRUE PRODUCTION CI/CD ACHIEVED!"
         echo "   • Zero manual intervention"
