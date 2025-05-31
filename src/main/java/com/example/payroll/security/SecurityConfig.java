@@ -37,6 +37,7 @@ public class SecurityConfig {
                .requestMatchers("/swagger-ui/**").permitAll()
                .requestMatchers("/api-docs/**").permitAll()
                 .requestMatchers("/employees/**").permitAll() // Allow public access to employees endpoint
+                .requestMatchers("/departments/**").permitAll() // Allow public access to departments endpoint
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
