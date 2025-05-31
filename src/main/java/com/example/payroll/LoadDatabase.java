@@ -30,25 +30,25 @@ class LoadDatabase {
     departmentRepository.save(department);
     departmentRepository.save(department2);
 
-    User user = new User("Bilbo@gmail.com", passwordEncoder.encode("bilbo"), "ROLE_ADMIN");
-    userRepository.save(user);
-    User user2 = new User("Frodo@gmail.com", passwordEncoder.encode("frodo"), "ROLE_USER");
-    userRepository.save(user2);
+    // User user = new User("Bilbo@gmail.com", passwordEncoder.encode("bilbo"), "ROLE_ADMIN");
+    // userRepository.save(user);
+    // User user2 = new User("Frodo@gmail.com", passwordEncoder.encode("frodo"), "ROLE_USER");
+    // userRepository.save(user2);
     
-    Employee employee = new Employee("Bilbo Baggins", "burglar", "bilbo@email.com");
-    employee.setUser(user);
-    employee.setDepartment(department);
-    department.addEmployee(employee);
+    // Employee employee = new Employee("Bilbo Baggins", "burglar", "bilbo@email.com");
+    // employee.setUser(user);
+    // employee.setDepartment(department);
+    // department.addEmployee(employee);
     
-    Employee employee2 = new Employee("Frodo Baggins", "thief", "frodo@email.com");
-    employee2.setUser(user2);
-    employee2.setDepartment(department2);
-    department2.addEmployee(employee2);
+    // Employee employee2 = new Employee("Frodo Baggins", "thief", "frodo@email.com");
+    // employee2.setUser(user2);
+    // employee2.setDepartment(department2);
+    // department2.addEmployee(employee2);
 
 
     return args -> {
-      log.info("Preloading " + repository.save(employee));
-      log.info("Preloading " + repository.save(employee2));
+      // log.info("Preloading " + repository.save(employee));
+      // log.info("Preloading " + repository.save(employee2));
     };
   }
 }
