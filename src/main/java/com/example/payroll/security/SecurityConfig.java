@@ -21,7 +21,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService userDetailsService;
 
-      public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
+            CustomUserDetailsService userDetailsService) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
     }
@@ -29,21 +30,48 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN") // Only admins
-                .requestMatchers("/swagger-ui.html").permitAll()
-               .requestMatchers("/swagger-ui/**").permitAll()
-               .requestMatchers("/api-docs/**").permitAll()
-                .requestMatchers("/employees/**").permitAll() // Allow public access to employees endpoint
-                .requestMatchers("/departments/**").permitAll() // Allow public access to departments endpoint
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider());
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        // ✅ CRITICAL: Health endpoints for CI/CD pipeline
+                        .requestMatchers("/actuator/health/**").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/actuator/info").permitAll()
+                        .requestMatchers("/actuator").permitAll()
 
+                        // ✅ Authentication endpoints
+                        .requestMatchers("/auth/**").permitAll()
+
+                        // ✅ Static resources and error handling
+                        .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/.well-known/**").permitAll()
+
+                        // ✅ API Documentation (Swagger)
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+
+                        // ✅ H2 Console (Development only)
+                        .requestMatchers("/h2-console/**").permitAll()
+
+                        // ✅ Business endpoints (currently public for testing)
+                        .requestMatchers("/employees/**").permitAll()
+                        .requestMatchers("/departments/**").permitAll()
+
+                        // 🔒 Admin endpoints (protected)
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // 🔒 Everything else requires authentication
+                        .anyRequest().authenticated())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider());
+
+        // ✅ Add JWT filter
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // ✅ Disable frame options for H2 console (development)
+        http.headers(headers -> headers.frameOptions().disable());
 
         return http.build();
     }
