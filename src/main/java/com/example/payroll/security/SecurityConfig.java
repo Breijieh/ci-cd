@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
 
                         // ✅ Business endpoints (currently public for testing)
-                        // .requestMatchers("/employees/**").permitAll()
+                        .requestMatchers("/employees/**").permitAll()
                         // .requestMatchers("/departments/**").permitAll()
 
                         // 🔒 Admin endpoints (protected)

@@ -3,6 +3,7 @@ package com.example.payroll.employeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,11 +42,11 @@ class EmployeeController {
       return employeeService.findById(id);    
   }
 
-  @GetMapping("/employees/email/{email}")
-  EntityModel<EmployeeDTO> getEmployeeByEmail(@PathVariable String email) {
-    return employeeService.findByEmail(email);
-  }
-
+@GetMapping("/employees/email/{email}")
+ResponseEntity<?> getEmployeeByEmail(@PathVariable String email) {
+    return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+        .body("Method not implemented");
+}
   @PutMapping("/employees/{id}")
   ResponseEntity<?> replaceEmployee(@RequestBody EmployeeDTO newEmployee, @PathVariable Long id) {
     return ResponseEntity.ok(employeeService.save(newEmployee, id));    
